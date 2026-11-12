@@ -37,7 +37,7 @@ A prepaid key is `rc_` plus 43 URL-safe base64 characters. It is a secret and ca
 - Best: the user creates it in their own terminal with `npx -y ready-check-mcp generate-key` and sets it as `READY_CHECK_KEY`.
 - Never paste the key into chat, logs, commits, or files.
 
-## Option A: MCP server (preferred)
+## If your client supports MCP: use the MCP server
 
 Add to the MCP client config:
 
@@ -60,15 +60,15 @@ Tools:
 - `ready_check_balance` reads remaining credit. Free.
 - `ready_check_buy_credit` starts a $2 or $5 pack and returns a Stripe Checkout URL. Needs `principal_approved: true`.
 
-## Option B: HTTP API
+## If your client has no MCP support: use the HTTP API
 
 Base URL: `https://api.readyupagents.com`
 
 - `POST /v1/ready-check` with `Authorization: Bearer <key>` and `Content-Type: application/json`. Body: `{"body": "...", "from": "...", "subject": "...", "kind": "sponsorship"}`. Only `body` is required.
 - `GET /v1/ready-check/balance` with the same header.
-- `POST /v1/payments/register` with `{"pack_dollars": 1 or 5, "key": "<key>"}` returns `checkout_url`.
+- `POST /v1/payments/register` with `{"pack_dollars": 2 or 5, "key": "<key>"}` returns `checkout_url`.
 
-Send an `Idempotency-Key` header on checks. If a request times out, check the balance, then retry with the same `Idempotency-Key` and the same body so the check is not charged twice. A retry returns the original result, or `check_in_progress` (409, not charged): wait and retry with the same key. Never reuse a key for a different email (422 `idempotency_key_reused`).
+Always send an `Idempotency-Key` header: a new value for each new email, the same value on every retry of that email, so nothing is charged twice. Every error has one `next_action` (`fix_request`, `retry_after`, `retry_same_request`, `new_idempotency_key`, `buy_pack`, `generate_new_key`, `stop`); do what it says, waiting `retry_after_seconds` where given. After 3 identical errors in a row, stop and tell your principal. There is no support or refund path for agents.
 
 ## Choosing `kind`
 
