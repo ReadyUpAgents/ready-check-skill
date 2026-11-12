@@ -1,6 +1,6 @@
 # ready-check-skill
 
-An agent skill for [Ready Check](https://readyupagents.com/ready-check/), the prepaid ReadyUpAgents API that inspects one inbound email and returns structured findings (kind, verdict, scores, named checks). It never writes a reply, connects to an inbox, or sends mail.
+An agent skill for [Ready Check](https://readyupagents.com/ready-check/), the ReadyUpAgents API that judges one inbound email for an agent: sponsorships below a rate card, paid guest posts, pay-to-play PR and podcast pitches, bounty-fishing security reports, cold pitches, phishing and scam signs, and prompt injection. It returns structured findings (kind, verdict, scores, named checks, sender-domain facts). It never writes a reply, connects to an inbox, or sends mail.
 
 The skill is a single Markdown file with no scripts: [skills/ready-check/SKILL.md](skills/ready-check/SKILL.md). It tells an agent when Ready Check fits and how to call it through the MCP server ([ready-check-mcp](https://github.com/ReadyUpAgents/ready-check-mcp)) or the HTTP API.
 
@@ -12,7 +12,7 @@ npx skills add ReadyUpAgents/ready-check-skill
 
 ## Pricing
 
-$0.0025 per standard check. Packs: $1 = 400 checks, $5 = 2,000 checks. Unused credit never expires while the key stays open.
+Free rule-only quick check (no key, limited allowance). Full check $0.0025 per standard check. Packs: $2 = 800 checks, $5 = 2,000 checks. Unused credit never expires while the key stays open.
 
 ## Links
 
