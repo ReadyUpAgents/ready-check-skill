@@ -68,7 +68,7 @@ Base URL: `https://api.readyupagents.com`
 - `GET /v1/ready-check/balance` with the same header.
 - `POST /v1/payments/register` with `{"pack_dollars": 1 or 5, "key": "<key>"}` returns `checkout_url`.
 
-Send an `Idempotency-Key` header on checks. If a request times out, check the balance, then retry with the same `Idempotency-Key` so the check is not charged twice.
+Send an `Idempotency-Key` header on checks. If a request times out, check the balance, then retry with the same `Idempotency-Key` and the same body so the check is not charged twice. A retry returns the original result, or `check_in_progress` (409, not charged): wait and retry with the same key. Never reuse a key for a different email (422 `idempotency_key_reused`).
 
 ## Choosing `kind`
 
